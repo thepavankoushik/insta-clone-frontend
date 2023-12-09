@@ -3,12 +3,40 @@ import "./App.css";
 import { useEffect } from "react";
 import React, { useState } from "react";
 import Post from "./Post";
-import { Button } from "@material-ui/core";
+import { Button, Input, Modal, makeStyles } from "@material-ui/core";
+
 const BASE_URL = "http://localhost:8000";
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    backgroundColor: theme.palette.background.paper, // "#fff"
+    position: "absolute",
+    width: 400,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
+
 function App() {
+  const classes = useStyles(); // classes.paper
+
   const [posts, setPosts] = useState([]);
   const [openSignIn, setOpenSignIn] = useState(false);
   const [openSignUp, setOpenSignUp] = useState(false);
+  const [modalStyle, setModalStyle] = useState(getModalStyle);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   useEffect(() => {
     fetch(`${BASE_URL}/post/all`)
       .then((response) => {
@@ -41,8 +69,40 @@ function App() {
         alert(error);
       });
   }, []);
+
+  const signin = (event) => {};
   return (
     <div className="App">
+      <Modal open={openSignIn} onClose={() => setOpenSignIn(false)}>
+        <div style={modalStyle} className={classes.paper}>
+          <form className="app_signin">
+            <center>
+              <img
+                className="app_headerImage"
+                src="https://i0.wp.com/www.pngall.com/wp-content/uploads/2016/04/Instagram-Free-Download-PNG.png"
+                alt="Instagram"
+              />
+            </center>
+            <Input
+              placeholder="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Input
+              placeholder="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" onClick={signin}>
+              {" "}
+              Login
+            </Button>
+          </form>
+        </div>
+      </Modal>
+
       <div className="app_header">
         <img
           className="app_headerImage"

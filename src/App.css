@@ -27,3 +27,10 @@
   object-fit: contain;
   width: 200px;
 }
+
+.app_signin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px;
+}
