@@ -101,6 +101,13 @@ function App() {
       });
     setOpenSignIn(false);
   };
+  const signOut = (event) => {
+    setAuthToken(null);
+    setAuthTokenType(null);
+    setUserId("");
+    setUsername("");
+    setPassword("");
+  };
   return (
     <div className="App">
       <Modal open={openSignIn} onClose={() => setOpenSignIn(false)}>
@@ -139,10 +146,14 @@ function App() {
           src="https://i0.wp.com/www.pngall.com/wp-content/uploads/2016/04/Instagram-Free-Download-PNG.png"
           alt="Instagram"
         />
-        <div>
-          <Button onClick={() => setOpenSignIn(true)}>Login</Button>
-          <Button onClick={() => setOpenSignUp(true)}>Sign Up</Button>
-        </div>
+        {authToken ? (
+          <Button onClick={() => signOut()}>Logout</Button>
+        ) : (
+          <div className="app_loginContainer">
+            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+            <Button onClick={() => setOpenSignUp(true)}>Sign Up</Button>
+          </div>
+        )}
       </div>
       <div className="app_posts">
         {posts.map((post) => (
