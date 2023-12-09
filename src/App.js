@@ -3,9 +3,12 @@ import "./App.css";
 import { useEffect } from "react";
 import React, { useState } from "react";
 import Post from "./Post";
+import { Button } from "@material-ui/core";
 const BASE_URL = "http://localhost:8000";
 function App() {
   const [posts, setPosts] = useState([]);
+  const [openSignIn, setOpenSignIn] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState(false);
   useEffect(() => {
     fetch(`${BASE_URL}/post/all`)
       .then((response) => {
@@ -39,10 +42,23 @@ function App() {
       });
   }, []);
   return (
-    <div className="app_posts">
-      {posts.map((post) => (
-        <Post post={post} />
-      ))}
+    <div className="App">
+      <div className="app_header">
+        <img
+          className="app_headerImage"
+          src="https://i0.wp.com/www.pngall.com/wp-content/uploads/2016/04/Instagram-Free-Download-PNG.png"
+          alt="Instagram"
+        />
+        <div>
+          <Button onClick={() => setOpenSignIn(true)}>Login</Button>
+          <Button onClick={() => setOpenSignUp(true)}>Sign Up</Button>
+        </div>
+      </div>
+      <div className="app_posts">
+        {posts.map((post) => (
+          <Post post={post} />
+        ))}
+      </div>
     </div>
   );
 }
