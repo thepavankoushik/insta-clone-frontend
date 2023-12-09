@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
-
+import logo from "./logo.svg";
+import "./App.css";
+import { useEffect } from "react";
+import React, { useState } from "react";
+import Post from "./Post";
+const BASE_URL = "http://localhost:8000";
 function App() {
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    fetch(`${BASE_URL}/post/all`)
+      .then((response) => {
+        const json_r = response.json();
+        console.log(json_r);
+        if (response.ok) {
+          return json_r;
+        }
+        throw response;
+      })
+      .then((data) => {
+        setPosts(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error);
+      });
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app_posts">
+      {posts.map((post) => (
+        <Post post={post} />
+      ))}
     </div>
   );
 }
