@@ -16,7 +16,7 @@ function Post({ post, authToken, authTokenType, username }) {
   }, []);
   useEffect(() => {
     setComments(post.comments);
-  });
+  }, []);
   const postComment = (event) => {
     event?.preventDefault();
     const json_string = JSON.stringify({
@@ -40,6 +40,9 @@ function Post({ post, authToken, authTokenType, username }) {
         }
         throw response;
       })
+      .then((data) => {
+        fetchComments();
+      })
       .catch((error) => {
         console.log(error);
         alert(error);
@@ -59,6 +62,23 @@ function Post({ post, authToken, authTokenType, username }) {
           window.location.reload();
         }
         throw response;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchComments = () => {
+    fetch(`${BASE_URL}/comment/all/${post.id}`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw response;
+      })
+      .then((data) => {
+        console.log(data);
+        setComments(data);
       })
       .catch((error) => {
         console.log(error);
