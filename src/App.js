@@ -37,6 +37,7 @@ function App() {
   const [modalStyle, setModalStyle] = useState(getModalStyle);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [emailid, setEmailid] = useState("");
   const [authToken, setAuthToken] = useState(null);
   const [authTokenType, setAuthTokenType] = useState(null);
   const [userId, setUserId] = useState("");
@@ -95,8 +96,44 @@ function App() {
       });
   }, []);
 
+  const signUp = (event) => {
+    event?.preventDefault();
+
+    const json_string = JSON.stringify({
+      username: username,
+      email: emailid,
+      password: password,
+    });
+    let formData = new FormData();
+    formData.append("username", username);
+    formData.append("email", emailid);
+    formData.append("password", password);
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: json_string,
+    };
+    fetch(`${BASE_URL}/user/`, requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw response;
+        }
+      })
+      .then((data) => {
+        console.log(data);
+        signin();
+        setOpenSignUp(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error);
+      });
+  };
+
   const signin = (event) => {
-    event.preventDefault();
+    event?.preventDefault();
     let formData = new FormData();
     formData.append("username", username);
     formData.append("password", password);
@@ -164,7 +201,40 @@ function App() {
           </form>
         </div>
       </Modal>
-
+      <Modal open={openSignUp} onClose={() => setOpenSignUp(false)}>
+        <div style={modalStyle} className={classes.paper}>
+          <form className="app_signin">
+            <center>
+              <img
+                className="app_headerImage"
+                src="https://i0.wp.com/www.pngall.com/wp-content/uploads/2016/04/Instagram-Free-Download-PNG.png"
+                alt="Instagram"
+              />
+            </center>
+            <Input
+              placeholder="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Input
+              placeholder="emailid"
+              type="text"
+              value={emailid}
+              onChange={(e) => setEmailid(e.target.value)}
+            />
+            <Input
+              placeholder="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" onClick={signUp}>
+              SignUp
+            </Button>
+          </form>
+        </div>
+      </Modal>
       <div className="app_header">
         <img
           className="app_headerImage"
