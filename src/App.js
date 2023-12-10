@@ -40,6 +40,28 @@ function App() {
   const [authToken, setAuthToken] = useState(null);
   const [authTokenType, setAuthTokenType] = useState(null);
   const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    setAuthToken(window.localStorage.getItem("authToken"));
+    setAuthTokenType(window.localStorage.getItem("authTokenType"));
+    setUserId(window.localStorage.getItem("userId"));
+    setUsername(window.localStorage.getItem("username"));
+  }, []);
+
+  useEffect(() => {
+    if (authToken) {
+      window.localStorage.setItem("authToken", authToken);
+    }
+    if (authTokenType) {
+      window.localStorage.setItem("authTokenType", authTokenType);
+    }
+    if (userId) {
+      window.localStorage.setItem("userId", userId);
+    }
+    if (username) {
+      window.localStorage.setItem("username", username);
+    }
+  }, [authToken, authTokenType, userId]);
   useEffect(() => {
     fetch(`${BASE_URL}/post/all`)
       .then((response) => {
@@ -107,6 +129,10 @@ function App() {
     setUserId("");
     setUsername("");
     setPassword("");
+    window.localStorage.removeItem("authToken");
+    window.localStorage.removeItem("authTokenType");
+    window.localStorage.removeItem("userId");
+    window.localStorage.removeItem("username");
   };
   return (
     <div className="App">
@@ -133,7 +159,6 @@ function App() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button type="submit" onClick={signin}>
-              {" "}
               Login
             </Button>
           </form>
