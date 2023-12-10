@@ -3,9 +3,10 @@ import "./Post.css";
 import { Avatar, Button } from "@material-ui/core";
 
 const BASE_URL = "http://localhost:8000";
-function Post({ post }) {
+function Post({ post, authToken, authTokenType, username }) {
   const [imageUrl, setImageUrl] = useState("");
   const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
   useEffect(() => {
     if (post.image_url_type == "absolute") {
       setImageUrl(post.image_url);
@@ -16,13 +17,62 @@ function Post({ post }) {
   useEffect(() => {
     setComments(post.comments);
   });
+  const postComment = (event) => {
+    event?.preventDefault();
+    const json_string = JSON.stringify({
+      username: username,
+      text: newComment,
+      post_id: post.id,
+    });
+    const requestOptions = {
+      method: "POST",
+      headers: new Headers({
+        Authorization: authTokenType + " " + authToken,
+        "Content-Type": "application/json",
+      }),
+      body: json_string,
+    };
+
+    fetch(`${BASE_URL}/comment`, requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw response;
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error);
+      })
+      .finally(setNewComment(""));
+  };
+  const handleDelete = () => {
+    const requestOptions = {
+      method: "GET",
+      headers: new Headers({
+        Authorization: authTokenType + " " + authToken,
+      }),
+    };
+    fetch(`${BASE_URL}/post/delete/${post.id}`, requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          window.location.reload();
+        }
+        throw response;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div className="post">
       <div className="post_header">
         <Avatar className="post_avatar" alt="PK" src="" />
         <div className="post_headerInfo">
           <h3>{post.user.username}</h3>
-          <Button className="post_delete">Delete</Button>
+          <Button className="post_delete" onClick={handleDelete}>
+            Delete
+          </Button>
         </div>
       </div>
       <img className="post_image" src={imageUrl} alt="post_image" />
@@ -35,6 +85,25 @@ function Post({ post }) {
           </p>
         ))}
       </div>
+      {authToken && (
+        <form className="post_commentbox">
+          <input
+            className="post_input"
+            type="text"
+            placeholder="Add a comment..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <button
+            className="post_button"
+            type="submit"
+            disabled={!newComment}
+            onClick={postComment}
+          >
+            Post
+          </button>
+        </form>
+      )}
     </div>
   );
 }
