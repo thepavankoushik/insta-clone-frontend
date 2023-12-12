@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Post from "./Post";
 import { Button, Input, Modal, makeStyles } from "@material-ui/core";
 import ImageUpload from "./ImageUpload";
-const BASE_URL = "http://localhost:8000";
+import { BASE_URL } from "./constants";
 
 function getModalStyle() {
   const top = 50;

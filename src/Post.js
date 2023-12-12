@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Post.css";
 import { Avatar, Button } from "@material-ui/core";
-
-const BASE_URL = "http://localhost:8000";
+import { BASE_URL } from "./constants";
 function Post({ post, authToken, authTokenType, username }) {
   const [imageUrl, setImageUrl] = useState("");
   const [comments, setComments] = useState([]);
@@ -33,7 +32,7 @@ function Post({ post, authToken, authTokenType, username }) {
       body: json_string,
     };
 
-    fetch(`${BASE_URL}/comment`, requestOptions)
+    fetch(`${BASE_URL}/comment/create`, requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();

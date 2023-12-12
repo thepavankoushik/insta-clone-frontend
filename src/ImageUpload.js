@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@material-ui/core";
 import "./ImageUpload.css";
-
-const BASE_URL = "http://localhost:8000/";
+import { BASE_URL } from "./constants";
 
 function ImageUpload({ authToken, authTokenType, userId }) {
   const [caption, setCaption] = useState("");
@@ -24,7 +23,7 @@ function ImageUpload({ authToken, authTokenType, userId }) {
       }),
       body: formData,
     };
-    fetch(`http://localhost:8000/post/image`, requestOptions)
+    fetch(`${BASE_URL}/post/image`, requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -62,7 +61,7 @@ function ImageUpload({ authToken, authTokenType, userId }) {
       }),
       body: json_string,
     };
-    fetch(BASE_URL + "post", requestOptions)
+    fetch(`${BASE_URL}/post/create`, requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
