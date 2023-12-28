@@ -1,3 +1,2 @@
 //export const BASE_URL = "http://localhost:8000";
-export const BASE_URL =
-  "https://thepavankoushik-insta-backend-feefa9e6c747.herokuapp.com";
+export const BASE_URL = "http://52.21.120.190:8000";

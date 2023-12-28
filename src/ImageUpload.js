@@ -61,7 +61,7 @@ function ImageUpload({ authToken, authTokenType, userId }) {
       }),
       body: json_string,
     };
-    fetch(`${BASE_URL}/post/create`, requestOptions)
+    fetch(`${BASE_URL}/post`, requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
